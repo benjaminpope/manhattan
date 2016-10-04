@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.linear_model import OrthogonalMatchingPursuit
+from scipy.ndimage.filters import gaussian_filter1d
 
 '''-------------------------------------------------------
 Code to use compressed sensing to generate better, faster
@@ -8,9 +9,10 @@ individual frequencies even when they are irregularly
 sampled and corrupted by noise - within reason.
 -------------------------------------------------------'''
 
-def csper(t,y,fmin=None,fmax=None,nfreqs=5000,nsines=4,polyorder=2):
+def csper(t,y,fmin=None,fmax=None,nfreqs=5000,nsines=4,polyorder=2,sig=5):
 	trange = np.nanmax(t)-np.nanmin(t)
 	dt = np.abs(np.nanmedian(t-np.roll(t,-1)))
+	nt = np.size(t)
 
 	# make defaults
 
@@ -20,6 +22,8 @@ def csper(t,y,fmin=None,fmax=None,nfreqs=5000,nsines=4,polyorder=2):
 		fmax = 2./dt
 
 	freqs = np.linspace(fmin,fmax,nfreqs)
+	df = np.abs(np.nanmedian(freqs-np.roll(freqs,-1)))
+
 	X = np.zeros((nt,nfreqs*2+polyorder))
 
 	# set up matrix of sines and cosines
@@ -44,11 +48,15 @@ def csper(t,y,fmin=None,fmax=None,nfreqs=5000,nsines=4,polyorder=2):
 	print 'Sine components:', sines
 	print 'Cosine components:',cosines
 
+	amp_raw = np.sqrt(coef[:nfreqs]**2. + coef[nfreqs:-polyorder]**2)
+	amp = gaussian_filter1d(amp_raw,sig)
+
 	recon = np.dot(X,coef)
 
 	output = {'Frequencies':freqs,
-			  'Amplitudes':coef[:-polyorder],
+			  'Raw_Amplitudes':coef[:-polyorder],
 			  'Polynomial':coef[-polyorder:],
-			  'Reconstruction':recon}
+			  'Reconstruction':recon,
+			  'Amplitude':amp}
 
 	return output
