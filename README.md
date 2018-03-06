@@ -4,7 +4,7 @@
 
 ## Test L1-norm Periodograms for Astronomy
 
-If a signal is sparse in the Fourier domain - for example, it is the sum of a small number of coherent sinusoids - you shouldn't be using the Fourier transform or Lomb-Scargle periodogram to analyse it! 
+If a signal is sparse in the Fourier domain - for example, it is the sum of a small number of coherent sinusoids - you shouldn't be using the Fourier transform or Lomb-Scargle periodogram to analyse it! This is especially important for sparse, irregularly-sampled time series, as often occur in RV surveys, ground-based photometric surveys, or photometry from missions such as Hipparcos or Gaia. In these cases it would not ordinarily be possible to recover a good power spectrum of the astrophysical variability - but we know that for typical pulsating stars, or planets, there are only a few sinusoidal components to the signal.
 
 Following the [theory of compressed sensing](https://arxiv.org/abs/math/0503066), the L1 metric (sum of absolute values) turns out to be far better than the L2 metric (Euclidean distance) for inferring a sparse signal given noisy data. L1 is sometimes called the 'taxicab' or 'Manhattan' metric because in the discrete case, you can only move on a grid of streets rather than taking a diagonal - and because this code was written with the Empire State Building in view we'll take that as the repo name. 
 
