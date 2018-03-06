@@ -2,7 +2,7 @@
 [![Licence](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg?style=flat)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
 
 
-### Test L1-norm Periodograms for Astronomy
+## Test L1-norm Periodograms for Astronomy
 
 If a signal is sparse in the Fourier domain - for example, it is the sum of a small number of coherent sinusoids - you shouldn't be using the Fourier transform or Lomb-Scargle periodogram to analyse it! 
 
@@ -13,3 +13,14 @@ Following the [theory of compressed sensing](https://arxiv.org/abs/math/0503066)
 This repo is a thin wrapper for the [SPGL1 library](https://github.com/drrelyea/SPGL1_python_port) aimed at implementing a compressive sensing periodogram for astronomy. To the best of my knowledge no such code is available open-source. I hope you find it useful! 
 
 
+## Installation
+
+Just type 
+
+`python setup.py install` 
+
+and give it a go.
+
+## Citation
+
+Buy me a beer?
