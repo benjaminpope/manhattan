@@ -37,7 +37,7 @@ def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
     freqs = np.linspace(fmin,fmax,nfreqs)
     df = np.abs(np.nanmedian(freqs-np.roll(freqs,-1)))
 
-    if noise == True:
+    if noise is True:
     	ndirac = ndata
     else:
     	ndirac = 0
@@ -74,12 +74,17 @@ def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
     cosines = x[nfreqs:2*nfreqs]
     power = (sines**2 + cosines**2)
 
+    if noise:
+      diracs = x[-ndirac:]
+    else:
+      diracs = None
+
     output = {'freqs':freqs,
               'sines': sines,
               'cosines': cosines,
               'power':power,
               'polys':x[2*nfreqs:2*nfreqs+polyorder+1],
-              'diracs':x[-ndirac:],
+              'diracs':diracs,
               'resid':resid,
               'grad':grad,
               'info':info,
