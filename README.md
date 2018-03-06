@@ -10,7 +10,9 @@ Following the [theory of compressed sensing](https://arxiv.org/abs/math/0503066)
 
 *manhattan* follows Chen & Donoho, ["Application of Basis Pursuit in Spectrum Estimation"](http://ieeexplore.ieee.org/document/681827/), who built a compressed sensing periodogram with an astronomical context in mind. They considered a sum of sine, cosine and Dirac terms to fit astronomical radial velocity planet signals in collaboration with Scargle; we add some polynomial terms to help take care of long term trends, with the goal of also including cotrending basis vectors to make this more applicable to Kepler/K2 data. *manhattan* has a similar approach to Hara et al., ['Radial velocity data analysis with compressed sensing techniques'](http://adsabs.harvard.edu/abs/2017MNRAS.464.1220H), who did not publish their code. 
 
-This repo is a thin wrapper for the [SPGL1 library](https://github.com/drrelyea/SPGL1_python_port). To the best of my knowledge no such code is available open-source. I hope you find it useful! 
+This repo is a thin wrapper for the [SPGL1 library](https://github.com/drrelyea/SPGL1_python_port), and we use basis pursuit to find our sparse periodogram. This is a work in progress and doesn't do everything I want it to do yet, or really work in every case! 
+
+To the best of my knowledge no such code is available open-source. I hope you find it useful! 
 
 
 ## Installation
