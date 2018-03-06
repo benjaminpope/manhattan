@@ -11,8 +11,19 @@ sampled and corrupted by noise - within reason.
 -------------------------------------------------------'''
 
 def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
-	method="basis",tau=0.1):
+	method="basis",tau=0.1,noise=True):
+
+	# preprocess
+
     ndata = np.size(y)
+
+    tmin = t.min()
+    t -= tmin
+
+    yscale = y.max()-y.min()
+    ymin = y.min()
+
+    y = (y-ymin)/(yscale)-0.5
 
     trange = np.nanmax(t)-np.nanmin(t)
     dt = np.abs(np.nanmedian(t-np.roll(t,-1)))
@@ -26,7 +37,12 @@ def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
     freqs = np.linspace(fmin,fmax,nfreqs)
     df = np.abs(np.nanmedian(freqs-np.roll(freqs,-1)))
 
-    X = np.zeros((nt,nfreqs*2+polyorder+1+ndata))
+    if noise == True:
+    	ndirac = ndata
+    else:
+    	ndirac = 0
+
+    X = np.zeros((nt,nfreqs*2+polyorder+1+ndirac))
 
     # set up matrix of sines and cosines
     for j in range(nfreqs):
@@ -40,8 +56,8 @@ def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
 
     # now do the dirac delta functions
 
-    for j in range(ndata):
-        X[j,-ndata+j] = 1.
+    for j in range(ndirac):
+        X[j,-ndirac+j] = 1.
 
     if method == "basis":
     	x,resid,grad,info = spg_bp(X, y)
@@ -53,20 +69,23 @@ def basis_pursuit(t,y,fmin=None,fmax=None,nfreqs=5000,polyorder=2,
     else:
     	print "Did not select a method"
     	return 0 
+
+    sines = x[:nfreqs]
+    cosines = x[nfreqs:2*nfreqs]
     power = (sines**2 + cosines**2)
 
     output = {'freqs':freqs,
-              'sines': x[:nfreqs],
-              'cosines': x[nfreqs:2*nfreqs],
+              'sines': sines,
+              'cosines': cosines,
               'power':power,
               'polys':x[2*nfreqs:2*nfreqs+polyorder+1],
-              'diracs':x[-ndata:],
+              'diracs':x[-ndirac:],
               'resid':resid,
               'grad':grad,
               'info':info,
               'coeffs':x,
               'matrix':X,
-              'model':np.dot(X,x)
+              'model':(np.dot(X,x)+0.5)*yscale+ymin
              }
     
     return output 
