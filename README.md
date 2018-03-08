@@ -25,4 +25,4 @@ and give it a go.
 
 ## Citation
 
-Buy me a beer?
+Buy me a beer? And cite Chen & Donoho, and Hara et al.
